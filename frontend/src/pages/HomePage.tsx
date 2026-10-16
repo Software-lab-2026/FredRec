@@ -12,10 +12,10 @@ const Defaultsuggestions = [
 export default function HomePage() {
   return (
     <div className="mx-auto max-w-3xl pt-12 text-center">
-      <h1 className="text-4xl font-bold tracking-tight text-slate-900">
+      <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
         Learch Computer Science Topics for Free
       </h1>
-      <p className="mt-3 text-lg text-slate-600">
+      <p className="mt-3 text-lg text-slate-600 dark:text-slate-400">
         Search any CS topic and find free videos, courses, textbooks, research
         papers and more — all in one place.
       </p>
