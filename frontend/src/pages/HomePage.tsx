@@ -4,7 +4,7 @@ import SearchBar from "../components/SearchBar";
 const Defaultsuggestions = [
   "Operating Systems",
   "Machine Learning",
-  "Computer Netowrks",
+  "Computer Networks",
   "System Design",
   "Database Management System",
 ];
@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <div className="mx-auto max-w-3xl pt-12 text-center">
       <h1 className="text-4xl font-bold tracking-tight text-slate-900">
-        Learch Computer Science Topics for Free
+        Search Computer Science Topics for Free
       </h1>
       <p className="mt-3 text-lg text-slate-600">
         Search any CS topic and find free videos, courses, textbooks, research
