@@ -1,4 +1,6 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
+
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -13,6 +15,8 @@ export default function Layout() {
             FredRec
           </Link>
           <NavLink to="/topics">Topics</NavLink>
+          <ThemeToggle />
+
         </nav>
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
