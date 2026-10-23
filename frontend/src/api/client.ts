@@ -19,6 +19,7 @@ export class ApiError extends Error {
   }
 }
 
+/** Thin fetch wrapper for the FastAPI backend (all routes live under /api). */
 export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
   const headers = new Headers(options.headers)
   headers.set('Content-Type', 'application/json')
@@ -33,6 +34,8 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
   return res.json() as Promise<T>
 }
 
+/** Simulates network latency for mock responses. */
 export function delay(ms = 400) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
+
