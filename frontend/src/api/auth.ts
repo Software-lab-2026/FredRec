@@ -71,4 +71,3 @@ export async function fetchCurrentUser(token: string): Promise<User | null> {
 export function logout() {
   setToken(null)
 }
-
