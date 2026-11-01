@@ -2,13 +2,42 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+
+@theme {
+  --color-ink-50: #f4f8ff;
+  --color-ink-100: #e8effc;
+  --color-ink-200: #d0dbf0;
+  --color-ink-300: #b5c6e8;
+  --color-ink-400: #a8bff0;
+  --color-ink-500: var(--ink-500-mode);
+  --color-ink-600: #3a4f8a;
+  --color-ink-700: #1a3780;
+  --color-ink-800: #0a1f55;
+  --color-ink-900: #020f33;
+  --color-ink-950: #00040f;
+
+  --color-brand-50: #ddfbff;
+  --color-brand-100: #ccffff;
+  --color-brand-200: #80f2ff;
+  --color-brand-300: #66ffff;
+  --color-brand-400: #00ffff;
+  --color-brand-500: #00b8d9;
+  --color-brand-600: #01257d;
+  --color-brand-700: #011a5c;
+  --color-brand-800: #011440;
+  --color-brand-900: #0a2a70;
+  --color-brand-950: #0b2a80;
+}
+
 :root {
   color-scheme: light;
+  --ink-500-mode: #4a5f99; 
 }
 :root.dark {
   color-scheme: dark;
+  --ink-500-mode: #8a9ccb; 
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  @apply bg-ink-50 text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100;
 }

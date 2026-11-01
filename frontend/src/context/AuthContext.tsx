@@ -6,13 +6,13 @@ import { AuthContext, type AuthState } from "./useAuth";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  // Only "loading" if there's a stored token to validate.
+  // Only loading if a stored token to validate
   const [loading, setLoading] = useState(() => !!getToken());
 
   useEffect(() => {
     const token = getToken();
     if (!token) return;
-    authApi.fetchCurrentUser(token).then((u) => {
+    authApi.fetchCurrentUser().then((u) => {
       setUser(u);
       setLoading(false);
     });

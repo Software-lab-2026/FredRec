@@ -1,6 +1,6 @@
-export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
-
 const TOKEN_KEY = 'fredrec.token'
+
+const SERVER_DOWN_MESSAGE = "Can't reach the FredRec server. Check that the backend is running, then try again."
 
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY)
@@ -13,29 +13,35 @@ export function setToken(token: string | null) {
 
 export class ApiError extends Error {
   status: number
-  constructor(status: number, message: string) {
+  // Close matches for given query
+  suggestions: string[]
+  constructor(status: number, message: string, suggestions: string[] = []) {
     super(message)
     this.status = status
+    this.suggestions = suggestions
   }
 }
 
-/** Thin fetch wrapper for the FastAPI backend (all routes live under /api). */
 export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
   const headers = new Headers(options.headers)
   headers.set('Content-Type', 'application/json')
   const token = getToken()
   if (token) headers.set('Authorization', `Bearer ${token}`)
 
-  const res = await fetch(`/api${path}`, { ...options, headers })
+  const res = await fetch(`/api${path}`, { ...options, headers }).catch(() => {
+    throw new ApiError(0, SERVER_DOWN_MESSAGE)
+  })
+  if (res.status >= 500) throw new ApiError(res.status, SERVER_DOWN_MESSAGE)
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
-    throw new ApiError(res.status, body.detail ?? res.statusText)
+    const detail = body.detail
+    // FastAPI sends a message
+    if (detail && typeof detail === 'object' && !Array.isArray(detail)) {
+      throw new ApiError(res.status, detail.message ?? res.statusText, detail.suggestions ?? [])
+    }
+    if (Array.isArray(detail)) throw new ApiError(res.status, detail[0]?.msg ?? res.statusText)
+    throw new ApiError(res.status, detail ?? res.statusText)
   }
+  if (res.status === 204) return undefined as T
   return res.json() as Promise<T>
 }
-
-/** Simulates network latency for mock responses. */
-export function delay(ms = 400) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-

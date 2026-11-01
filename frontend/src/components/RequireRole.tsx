@@ -4,7 +4,7 @@ import { useAuth } from "../context/useAuth";
 import type { Role } from "../types/resource";
 import RequireAuth from "./RequireAuth";
 
-/* Like RequireAuth, but allso limits the page to given roles */
+// Like RequireAuth, but allso limits the page to given roles 
 export default function RequireRole({ roles, children }: { roles: Role[]; children: ReactNode }) {
   return (
     <RequireAuth>

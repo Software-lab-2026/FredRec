@@ -8,6 +8,8 @@ export interface AuthState {
   login: (username: string, password: string) => Promise<void>
   signup: (input: SignupInput) => Promise<void>
   logout: () => void
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>
+
 }
 
 export const AuthContext = createContext<AuthState | null>(null)
