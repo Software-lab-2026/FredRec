@@ -18,9 +18,9 @@ export default function SearchBar({
     if (!q.trim()) return;
     setOpen(false);
     setQuery(q);
-    navigate(` /search?q=${encodeURIComponent(q.trim())}`);
+    navigate(`/search?q=${encodeURIComponent(q.trim())}`);
   }
-  function onSubmit(e: Formevent) {
+  function onSubmit(e: FormEvent) {
     e.preventDefault();
     go(query);
   }
