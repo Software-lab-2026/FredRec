@@ -1,10 +1,5 @@
 from logging.config import fileConfig
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
-
 from app.core.db import get_sync_engine
 from app.models import Base
 
@@ -30,19 +25,9 @@ if config.config_file_name is not None:
 
 
 def run_migrations(connection) -> None:
-    """Run migrations in 'offline' mode.
-
-    This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
-
-    Calls to context.execute() here emit the given string to the
-    script output.
-
-    """
     context.configure(connection=connection,
-                      target_metadata=Base.metadata, compare_type=True)
+                      target_metadata=Base.metadata, compare_type=True, version_table_schema=config.attributes.get("version_table_schema"),
+                      )
     with context.begin_transaction():
         context.run_migrations()
 
