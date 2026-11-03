@@ -1,6 +1,6 @@
 import type { Difficulty, ResourceFormat } from "./resource";
 
-/** An admin-managed subject area (e.g. "Systems") with its topics. */
+//managed by admin
 export interface Domain {
   id: string;
   name: string;
@@ -32,7 +32,7 @@ export interface SubmissionEvent {
   at: string;
 }
 
-/** A curated resource moving through review: suggestion → expert → admin → published. */
+// An user Suggested resource flow : suggestion → expert → admin → published
 export interface Submission {
   id: string;
   url: string;
@@ -42,15 +42,13 @@ export interface Submission {
   format: ResourceFormat;
   domainId: string;
   topic: string;
-  suggestedDifficulty?: Difficulty;
-  /** Set by the expert (or admin); required before publishing. */
-  difficulty?: Difficulty;
+  suggestedDifficulty?: Difficulty; // given by enduser
+  difficulty?: Difficulty; //set by expert
   status: SubmissionStatus;
   submittedBy: { id: string; username: string };
   createdAt: string;
   publishedAt?: string;
   events: SubmissionEvent[];
-  /** Admin queue only: still awaiting expert review, but its domain has no active experts. */
   noActiveExperts?: boolean;
 }
 
@@ -61,11 +59,9 @@ export interface SubmissionInput {
   format: ResourceFormat;
   domainId: string;
   topic: string;
-  /** Optional hint from learners; required when an expert or admin submits. */
   difficulty?: Difficulty;
 }
 
-/** Fields an expert or admin may correct while approving. */
 export interface ReviewInput {
   title: string;
   format: ResourceFormat;

@@ -1,42 +1,72 @@
+import { startTransition } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
+import { ROLE_LABELS } from "../types/resource";
 import ThemeToggle from "./ThemeToggle";
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
-  `rounded-md px-3 py-2 text-sm font-medium ${isActive ? "bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"}`;
+  `rounded-md px-3 py-2 text-sm font-medium ${isActive ? "bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300" : "text-ink-600 dark:text-ink-400 hover:text-ink-900 dark:hover:text-white"}`;
 
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+      <header className="border-b border-ink-200 dark:border-ink-800 bg-white dark:bg-ink-900">
         <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-3">
           <Link
             to="/"
-            className="mr-4 text-lg font-bold text-indigo-600 dark:text-indigo-400"
+            className="mr-4 text-lg font-bold text-brand-600 dark:text-brand-400"
           >
             FredRec
           </Link>
-          <NavLink to="/topics">Topics</NavLink>
+          <NavLink to="/topics" className={navClass}>
+            Topics
+          </NavLink>
           {user && (
             <NavLink to="/workspaces" className={navClass}>
               My Workspaces
+            </NavLink>
+          )}
+          {user && (
+            <NavLink to="/teams" className={navClass}>
+              Teams
+            </NavLink>
+          )}
+          {user && (
+            <NavLink to="/suggestions" className={navClass}>
+              My Suggestions
+            </NavLink>
+          )}
+          {user?.role === "expert" && (
+            <NavLink to="/expert" className={navClass}>
+              Expert
+            </NavLink>
+          )}
+          {user?.role === "admin" && (
+            <NavLink to="/admin" className={navClass}>
+              Admin
             </NavLink>
           )}
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
             {user ? (
               <>
-                <span className="text-sm text-slate-600 dark:text-slate-400">
+                <span className="text-sm text-ink-600 dark:text-ink-400">
                   @{user.username}
+                  {user.role !== "enduser" && (
+                    <span className="ml-1.5 rounded-full bg-ink-100 px-2 py-0.5 text-xs dark:bg-ink-800">
+                      {ROLE_LABELS[user.role]}
+                    </span>
+                  )}
                 </span>
                 <button
                   onClick={() => {
-                    logout();
                     navigate("/");
+                    startTransition(() => logout());
                   }}
-                  className="rounded-md px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  className="rounded-md px-3 py-2 text-sm text-ink-600 dark:text-ink-400 hover:text-ink-900 dark:hover:text-white"
                 >
                   Log out
                 </button>
@@ -48,7 +78,7 @@ export default function Layout() {
                 </NavLink>
                 <Link
                   to="/signup"
-                  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+                  className="rounded-md bg-brand-600 dark:bg-brand-400 px-3 py-2 text-sm font-medium text-brand-400 dark:text-brand-600 hover:bg-brand-700 dark:hover:bg-brand-300"
                 >
                   Sign up
                 </Link>
@@ -60,7 +90,7 @@ export default function Layout() {
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
         <Outlet />
       </main>
-      <footer className="border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+      <footer className="border-t border-ink-200 dark:border-ink-800 py-4 text-center text-xs text-ink-500">
         Free educational resources for Computer Science
       </footer>
     </div>
