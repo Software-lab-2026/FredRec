@@ -9,7 +9,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import get_settings
 from app.core.db import get_session
-from app.api.routes import auth, admin, domains, expert
+from app.api.routes import auth, admin, domains, expert, submissions
 
 
 @asynccontextmanager
@@ -21,7 +21,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
 
 app = FastAPI(title="FredRec API", lifespan=lifespan)
-for router in (auth.router, domains.router, expert.router, admin.router):
+for router in (auth.router, domains.router, expert.router, admin.router, submissions.router, submissions.expert_router, submissions.admin_router):
     app.include_router(router, prefix="/api")
 
 
