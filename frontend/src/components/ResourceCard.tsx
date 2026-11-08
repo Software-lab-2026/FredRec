@@ -8,7 +8,7 @@ function formatDuration(minutes: number) {
   return `${hours} hrs`;
 }
 
-const difficulty_style = {
+const DIFFICULTY_STYLES = {
   beginner:
     "bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300",
   intermediate:

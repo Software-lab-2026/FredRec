@@ -18,7 +18,7 @@ export default function Layout() {
           >
             FredRec
           </Link>
-          <NavLink to="/topics">Topics</NavLink>
+          <NavLink to="/topics" className={navClass}>Topics</NavLink>
           {user && (
             <NavLink to="/workspaces" className={navClass}>
               My Workspaces
