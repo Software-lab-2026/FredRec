@@ -63,6 +63,8 @@ export default function Layout() {
                 </span>
                 <button
                   onClick={() => {
+                    // Router navigations run as transitions; logging out in the same transition
+                    // stops protected pages from redirecting to /login before we reach "/".
                     navigate("/");
                     startTransition(() => logout());
                   }}

@@ -35,6 +35,15 @@ export interface Resource {
   origin?: 'fetched' | 'curated'
 }
 
+export type MatchMethod = 'exact' | 'alias' | 'vector' | 'partial'
+
+export interface SearchMatch {
+  kind: 'topic' | 'concept'
+  name: string
+  method: MatchMethod
+  path: string[]
+}
+
 export interface SearchResponse {
   query: string
   topic: string
@@ -50,6 +59,8 @@ export interface Progress {
   percent: number
 }
 
+export type WorkspaceAccess = 'owner' | 'editor' | 'viewer'
+
 export interface Workspace {
   id: string
   name: string
@@ -57,6 +68,7 @@ export interface Workspace {
   itemCount: number
   completedCount: number
 }
+
 
 //tracked per usser per resource and common across all workspaces
 export interface WorkspaceItem extends Progress {
