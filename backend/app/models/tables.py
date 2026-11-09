@@ -389,3 +389,14 @@ class WorkspaceItem(Base):
         ForeignKey("users.id", ondelete="SET NULL"))
     added_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now())
+
+
+class SearchCache(Base):
+
+    __tablename__ = "search_cache"
+
+    key: Mapped[str] = mapped_column(String(300), primary_key=True)
+    value: Mapped[Any] = mapped_column(JSONB)
+    expires_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), index=True)
+    created_at: Mapped[datetime] = created_at()

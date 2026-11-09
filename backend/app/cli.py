@@ -4,13 +4,13 @@ import getpass
 import sys
 from pathlib import Path
 import yaml
-from sqlalchemy import Engine, func, select
+from sqlalchemy import Engine, delete, func, select
 from sqlalchemy.orm import Session
 from app.core.config import BACKEND_DIR, MissingDatabaseUrl
 from app.core.db import get_sync_engine
 from app.core.security import hash_password
 from app.core.validation import clean_email, clean_password, clean_username
-from app.models import Domain, Topic, User
+from app.models import Domain, Topic, User, SearchCache
 from app.models.base import Role
 
 SEED_FILE = BACKEND_DIR / "data" / "topics.yaml"
@@ -54,6 +54,14 @@ def seed_domains(engine: Engine, seed_file: Path = SEED_FILE) -> tuple[int, int]
                     new_topics += 1
         session.commit()
     return new_domains, new_topics
+
+
+def prune_cache(engine: Engine) -> int:
+    with Session(engine) as session:
+        deleted = session.execute(
+            delete(SearchCache).where(SearchCache.expires_at <= func.now())).rowcount
+        session.commit()
+    return deleted
 
 
 def main() -> int:
