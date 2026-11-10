@@ -47,7 +47,10 @@ export interface SearchMatch {
 export interface SearchResponse {
   query: string
   topic: string
+  match: SearchMatch
   results: Resource[]
+  related: Resource[]
+  suggestions: string[]
   failedSources: string[] // timed out during access
   cached: boolean
 }
@@ -67,6 +70,8 @@ export interface Workspace {
   createdAt: string
   itemCount: number
   completedCount: number
+  team?: { id: string; name: string } | null
+  access: WorkspaceAccess
 }
 
 
