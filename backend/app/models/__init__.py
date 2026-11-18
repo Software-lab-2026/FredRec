@@ -1,0 +1,35 @@
+from app.models.base import Base
+from app.models.tables import (
+    Domain,
+    DomainExpert,
+    Progress,
+    Resource,
+    ResourceSubmission,
+    Review,
+    SubmissionEvent,
+    Team,
+    TeamInvite,
+    TeamMember,
+    Topic,
+    User,
+    Workspace,
+    WorkspaceItem,
+)
+
+__all__ = [
+    "Base",
+    "Domain",
+    "DomainExpert",
+    "Progress",
+    "Resource",
+    "ResourceSubmission",
+    "Review",
+    "SubmissionEvent",
+    "Team",
+    "TeamInvite",
+    "TeamMember",
+    "Topic",
+    "User",
+    "Workspace",
+    "WorkspaceItem",
+]
