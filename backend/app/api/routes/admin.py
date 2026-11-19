@@ -22,6 +22,9 @@ from app.schemas.admin import (
     ExpertUpdateIn,
     TopicCreateIn,
 )
+from app.schemas.stats import AdminStats
+from app.services.embedding_text import embed_topics
+from app.services.stats import admin_stats
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -67,28 +70,28 @@ async def rename_domain(domain_id: UUID, body: DomainRenameIn, _admin: AdminUser
     return await _domain_out(session, domain_id)
 
 
-# @router.post("/domains/{domain_id}/topics", status_code=status.HTTP_201_CREATED)
-# async def add_topic(domain_id: UUID, body: TopicCreateIn, _admin: AdminUser, session: SessionDep) -> DomainOut:
-#     await _get_domain(session, domain_id)
-#     owner = await session.scalar(
-#         select(Domain.name).join(Topic, Topic.domain_id == Domain.id).where(
-#             func.lower(Topic.name) == body.name.lower())
-#     )
-#     if owner is not None:
-#         raise HTTPException(status.HTTP_409_CONFLICT, f"“{
-#                             body.name}” already exists in {owner}.")
-#     topic = Topic(domain_id=domain_id, name=body.name,
-#                   description=body.description.strip())
-#     session.add(topic)
-#     try:
-#         await session.flush()
-#     except IntegrityError as e:
-#         await session.rollback()
-#         raise HTTPException(status.HTTP_409_CONFLICT, f"“{
-#                             body.name}” already exists.") from e
-#     await embed_topics(session, [topic])
-#     await session.commit()
-#     return await _domain_out(session, domain_id)
+@router.post("/domains/{domain_id}/topics", status_code=status.HTTP_201_CREATED)
+async def add_topic(domain_id: UUID, body: TopicCreateIn, _admin: AdminUser, session: SessionDep) -> DomainOut:
+    await _get_domain(session, domain_id)
+    owner = await session.scalar(
+        select(Domain.name).join(Topic, Topic.domain_id == Domain.id).where(
+            func.lower(Topic.name) == body.name.lower())
+    )
+    if owner is not None:
+        raise HTTPException(status.HTTP_409_CONFLICT, f"“{
+                            body.name}” already exists in {owner}.")
+    topic = Topic(domain_id=domain_id, name=body.name,
+                  description=body.description.strip())
+    session.add(topic)
+    try:
+        await session.flush()
+    except IntegrityError as e:
+        await session.rollback()
+        raise HTTPException(status.HTTP_409_CONFLICT, f"“{
+                            body.name}” already exists.") from e
+    await embed_topics(session, [topic])
+    await session.commit()
+    return await _domain_out(session, domain_id)
 
 
 async def _experts_out(session: AsyncSession, *conditions) -> list[ExpertOut]:
@@ -170,3 +173,10 @@ async def update_expert(expert_id: UUID, body: ExpertUpdateIn, admin: AdminUser,
         )
     await session.commit()
     return (await _experts_out(session, User.id == expert_id))[0]
+
+
+@router.get("/stats")
+async def stats(
+    _admin: AdminUser, session: SessionDep, days: Annotated[int, Query(ge=1, le=90)] = 30
+) -> AdminStats:
+    return await admin_stats(session, days)

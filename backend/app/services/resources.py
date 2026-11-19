@@ -5,6 +5,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Resource
 from app.schemas.resources import ResourceIn, ResourceOut
+from app.services.embedding_text import embed_resource
 from app.services.urls import normalize_url, source_name
 
 
@@ -38,6 +39,8 @@ async def upsert_resource(session: AsyncSession, data: ResourceIn, user_id: uuid
         .on_conflict_do_nothing(index_elements=[Resource.url_hash])
     )
     resource = await session.scalar(select(Resource).where(Resource.url_hash == url_hash))
+    if resource.embedding is None:
+        await embed_resource(session, resource)
     return resource
 
 

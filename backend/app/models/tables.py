@@ -16,18 +16,24 @@ from sqlalchemy import (
     func,
     text,
 )
+from pgvector.sqlalchemy import Vector
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
+from app.core.embeddings import DIMENSIONS
 from app.models.base import (
     Base,
+    ConceptRelation,
     Difficulty,
     InviteStatus,
+    MatchKind,
+    MatchMethod,
     ProgressStatus,
     ResourceFormat,
     ResourceOrigin,
     ResourceStatus,
     Role,
+    ScrapeStatus,
     SubmissionAction,
     SubmissionStatus,
     TeamRole,
@@ -90,7 +96,28 @@ class Topic(Base):
     name: Mapped[str] = mapped_column(String(60))
     aliases: Mapped[list[str]] = mapped_column(
         ARRAY(Text), default=list, server_default="{}")
+    description: Mapped[str] = mapped_column(
+        Text, default="", server_default="")
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(DIMENSIONS))
     created_at: Mapped[datetime] = created_at()
+
+
+class TopicPhrase(Base):
+    __tablename__ = "topic_phrases"
+    __table_args__ = (
+        Index(
+            "ix_topic_phrases_embedding",
+            "embedding",
+            postgresql_using="hnsw",
+            postgresql_ops={"embedding": "vector_cosine_ops"},
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = uuid_pk()
+    topic_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("topics.id", ondelete="CASCADE"), index=True)
+    phrase: Mapped[str] = mapped_column(Text)
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(DIMENSIONS))
 
 
 class DomainExpert(Base):
@@ -106,7 +133,6 @@ class DomainExpert(Base):
 
 
 class Resource(Base):
-
     __tablename__ = "resources"
     __table_args__ = (
         CheckConstraint(
@@ -118,6 +144,12 @@ class Resource(Base):
         CheckConstraint("review_count >= 0", name="review_count_not_negative"),
         Index("ix_resources_curated_topic", "topic_id", postgresql_where=text(
             "origin = 'curated' AND status = 'active'")),
+        Index(
+            "ix_resources_embedding",
+            "embedding",
+            postgresql_using="hnsw",
+            postgresql_ops={"embedding": "vector_cosine_ops"},
+        ),
     )
 
     id: Mapped[uuid.UUID] = uuid_pk()
@@ -153,6 +185,7 @@ class Resource(Base):
         DateTime(timezone=True))
     first_added_by: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("users.id", ondelete="SET NULL"))
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(DIMENSIONS))
     created_at: Mapped[datetime] = created_at()
     updated_at: Mapped[datetime] = updated_at()
 
@@ -253,6 +286,7 @@ class Review(Base):
 
 
 class Progress(Base):
+
     __tablename__ = "progress"
     __table_args__ = (
         CheckConstraint("percent BETWEEN 0 AND 100", name="percent_range"),
@@ -299,6 +333,7 @@ class TeamMember(Base):
 
 
 class TeamInvite(Base):
+
     __tablename__ = "team_invites"
     __table_args__ = (
         CheckConstraint(
@@ -375,6 +410,7 @@ class Workspace(Base):
 
 
 class WorkspaceItem(Base):
+
     __tablename__ = "workspace_items"
 
     workspace_id: Mapped[uuid.UUID] = mapped_column(ForeignKey(
@@ -400,3 +436,161 @@ class SearchCache(Base):
     expires_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), index=True)
     created_at: Mapped[datetime] = created_at()
+
+
+class Concept(Base):
+
+    __tablename__ = "concepts"
+    __table_args__ = (
+        Index("uq_concepts_domain_name_lower", "domain_id",
+              text("lower(name)"), unique=True),
+        Index(
+            "ix_concepts_embedding",
+            "embedding",
+            postgresql_using="hnsw",
+            postgresql_ops={"embedding": "vector_cosine_ops"},
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = uuid_pk()
+    domain_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("domains.id", ondelete="RESTRICT"), index=True)
+    name: Mapped[str] = mapped_column(String(80))
+    description: Mapped[str] = mapped_column(
+        Text, default="", server_default="")
+    created_by: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"))
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(DIMENSIONS))
+    created_at: Mapped[datetime] = created_at()
+    updated_at: Mapped[datetime] = updated_at()
+
+
+class ConceptEdge(Base):
+
+    __tablename__ = "concept_edges"
+    __table_args__ = (
+        CheckConstraint(
+            "num_nonnulls(parent_topic_id, parent_concept_id) = 1", name="one_parent"),
+        CheckConstraint(
+            "parent_concept_id IS NULL OR parent_concept_id <> child_id", name="not_self"),
+        Index(
+            "uq_concept_edges_topic",
+            "parent_topic_id",
+            "child_id",
+            "relation",
+            unique=True,
+            postgresql_where=text("parent_topic_id IS NOT NULL"),
+        ),
+        Index(
+            "uq_concept_edges_concept",
+            "parent_concept_id",
+            "child_id",
+            "relation",
+            unique=True,
+            postgresql_where=text("parent_concept_id IS NOT NULL"),
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = uuid_pk()
+    parent_topic_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("topics.id", ondelete="CASCADE"), index=True)
+    parent_concept_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("concepts.id", ondelete="CASCADE"), index=True
+    )
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("concepts.id", ondelete="CASCADE"), index=True)
+    relation: Mapped[ConceptRelation] = mapped_column(
+        enum_column(ConceptRelation, "relation"),
+        default=ConceptRelation.SUBTOPIC_OF,
+        server_default="subtopic_of",
+    )
+    created_by: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"))
+    created_at: Mapped[datetime] = created_at()
+
+
+class SearchEvent(Base):
+
+    __tablename__ = "search_events"
+
+    id: Mapped[uuid.UUID] = uuid_pk()
+    query: Mapped[str] = mapped_column(String(200))
+    matched_kind: Mapped[MatchKind] = mapped_column(
+        enum_column(MatchKind, "matched_kind"))
+    match_method: Mapped[MatchMethod] = mapped_column(
+        enum_column(MatchMethod, "match_method"))
+    topic_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("topics.id", ondelete="SET NULL"))
+    concept_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("concepts.id", ondelete="SET NULL"))
+    # The domain of the match or, for an unmatched search, of the closest topic or concept. Lets each expert
+    # see the searches that nearly landed in their domains.
+    domain_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("domains.id", ondelete="SET NULL"), index=True)
+    similarity: Mapped[float | None]
+    result_count: Mapped[int] = mapped_column(default=0, server_default="0")
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), index=True)
+
+
+class ScrapedItem(Base):
+
+    __tablename__ = "scraped_items"
+    __table_args__ = (
+        UniqueConstraint("scraper", "external_id"),
+        Index("ix_scraped_items_search_text", text(
+            "to_tsvector('english', search_text)"), postgresql_using="gin"),
+        Index(
+            "ix_scraped_items_embedding",
+            "embedding",
+            postgresql_using="hnsw",
+            postgresql_ops={"embedding": "vector_cosine_ops"},
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = uuid_pk()
+    scraper: Mapped[str] = mapped_column(String(40))
+    external_id: Mapped[str] = mapped_column(String(300))
+    parent_external_id: Mapped[str | None] = mapped_column(String(300))
+    source: Mapped[str] = mapped_column(Text)
+    url: Mapped[str] = mapped_column(Text)
+    url_hash: Mapped[str] = mapped_column(String(64), index=True)
+    title: Mapped[str] = mapped_column(Text)
+    format: Mapped[ResourceFormat] = mapped_column(
+        enum_column(ResourceFormat, "format"))
+    description: Mapped[str] = mapped_column(
+        Text, default="", server_default="")
+    authors: Mapped[list[str]] = mapped_column(
+        ARRAY(Text), default=list, server_default="{}")
+    thumbnail: Mapped[str | None] = mapped_column(Text)
+    duration_minutes: Mapped[int | None]
+    published_year: Mapped[int | None]
+    extra: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, default=dict, server_default="{}")
+    search_text: Mapped[str] = mapped_column(
+        Text, default="", server_default="")
+    content_hash: Mapped[str] = mapped_column(String(64))
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(DIMENSIONS))
+    first_seen_at: Mapped[datetime] = created_at()
+    last_seen_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), index=True)
+
+
+class ScrapeRun(Base):
+    __tablename__ = "scrape_runs"
+
+    id: Mapped[uuid.UUID] = uuid_pk()
+    scraper: Mapped[str] = mapped_column(String(40), index=True)
+    status: Mapped[ScrapeStatus] = mapped_column(
+        enum_column(ScrapeStatus, "scrape_status"))
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), index=True)
+    finished_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True))
+    pages_fetched: Mapped[int] = mapped_column(default=0, server_default="0")
+    items_seen: Mapped[int] = mapped_column(default=0, server_default="0")
+    items_added: Mapped[int] = mapped_column(default=0, server_default="0")
+    items_updated: Mapped[int] = mapped_column(default=0, server_default="0")
+    items_removed: Mapped[int] = mapped_column(default=0, server_default="0")
+    error_count: Mapped[int] = mapped_column(default=0, server_default="0")
+    message: Mapped[str] = mapped_column(Text, default="", server_default="")

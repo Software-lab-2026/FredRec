@@ -18,6 +18,7 @@ from app.schemas.submissions import (
     SubmissionOut,
     SubmitterOut,
 )
+from app.services.embedding_text import embed_resource
 from app.services.resources import url_hash_or_422
 from app.services.urls import source_name
 
@@ -166,6 +167,7 @@ async def _publish(session: AsyncSession, s: ResourceSubmission, now: datetime) 
         .returning(Resource.id)
     )
     resource = await session.get(Resource, resource_id, populate_existing=True)
+    await embed_resource(session, resource)
     return resource_id
 
 

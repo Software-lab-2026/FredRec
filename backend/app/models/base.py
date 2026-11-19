@@ -18,7 +18,6 @@ class Base(DeclarativeBase):
 
 
 def enum_column(enum_class: type[enum.Enum], name: str) -> Enum:
-    """Stores the enum's lowercase value as text with a CHECK, so adding a value is a simple migration."""
     return Enum(
         enum_class,
         name=name,
@@ -108,6 +107,33 @@ class TeamRole(str, enum.Enum):
     OWNER = "owner"
     EDITOR = "editor"
     VIEWER = "viewer"
+
+
+class ConceptRelation(str, enum.Enum):
+    SUBTOPIC_OF = "subtopic_of"
+    PREREQUISITE_OF = "prerequisite_of"
+    RELATED_TO = "related_to"
+
+
+class MatchKind(str, enum.Enum):
+    TOPIC = "topic"
+    CONCEPT = "concept"
+    NONE = "none"
+
+
+class MatchMethod(str, enum.Enum):
+    EXACT = "exact"
+    ALIAS = "alias"
+    VECTOR = "vector"
+    PARTIAL = "partial"
+    NONE = "none"
+
+
+class ScrapeStatus(str, enum.Enum):
+    RUNNING = "running"
+    SUCCEEDED = "succeeded"
+    PARTIAL = "partial"
+    FAILED = "failed"
 
 
 class InviteStatus(str, enum.Enum):
