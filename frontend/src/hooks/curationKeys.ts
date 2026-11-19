@@ -3,7 +3,6 @@ export const domainKeys = {
   mine: (userId: string) => ["domains", "mine", userId] as const,
 };
 
-
 export const curationKeys = {
   all: ["curation"] as const,
   mine: (userId: string) => ["curation", "mine", userId] as const,

@@ -32,11 +32,13 @@ export default function App() {
         <Route path="search" element={<SearchPage />} />
         <Route path="topics" element={<TopicsPage />} />
         {/* concept maps: only the domain's experts and the admin */}
+        
+
         <Route
           path="graph/:domainId"
           element={
             <RequireRole roles={["expert", "admin"]}>
-              <Suspense fallback={<Loader />}>
+              <Suspense fallback={<Loader />}> {/*animated loader */}
                 <ConceptGraphPage />
               </Suspense>
             </RequireRole>
