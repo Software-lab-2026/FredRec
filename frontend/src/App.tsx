@@ -1,3 +1,4 @@
+import AdminPage from "./pages/AdminPage";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/RequireAuth";
@@ -21,6 +22,14 @@ export default function App() {
           element={
             <RequireAuth>
               <WorkspacesPage />
+            </RequireAuth>
+          }
+        />
+                <Route
+          path="admin"
+          element={
+            <RequireAuth>
+              <AdminPage />
             </RequireAuth>
           }
         />
