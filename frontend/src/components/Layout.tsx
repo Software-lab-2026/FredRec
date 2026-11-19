@@ -19,10 +19,15 @@ export default function Layout() {
             FredRec
           </Link>
           <NavLink to="/topics" className={navClass}>Topics</NavLink>
-          {user && (
-            <NavLink to="/workspaces" className={navClass}>
-              My Workspaces
-            </NavLink>
+                    {user && (
+            <>
+              <NavLink to="/workspaces" className={navClass}>
+                My Workspaces
+              </NavLink>
+              <NavLink to="/admin" className={navClass}>
+                Admin
+              </NavLink>
+            </>
           )}
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
