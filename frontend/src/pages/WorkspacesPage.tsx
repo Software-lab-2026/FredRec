@@ -18,7 +18,7 @@ export default function WorkspacesPage() {
   const [name, setName] = useState("");
 
   const create = useMutation({
-    mutationFn: (n: string) => createWorkspace(userId, n),
+    mutationFn: (n: string) => createWorkspace(n),
     onSuccess: () => {
       setName("");
       return queryClient.invalidateQueries({

@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import AuthCard, { Field } from "../components/AuthCard";
 import { useAuth } from "../context/useAuth";
+import { Spinner } from "../components/Loader";
 
 const USERNAME_PATTERN = /^[a-zA-Z0-9_]{3,20}$/;
 
@@ -42,6 +43,7 @@ export default function SignupPage() {
 
   return (
     <AuthCard
+      split
       title="Create your account"
       subtitle="Pick a unique username — teammates will use it to find you."
       error={error}
@@ -50,7 +52,7 @@ export default function SignupPage() {
           Already have an account?{" "}
           <Link
             to={`/login?next=${encodeURIComponent(next)}`}
-            className="font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+            className="font-medium text-brand-600 dark:text-brand-400 hover:underline"
           >
             Log in
           </Link>
@@ -81,9 +83,13 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-md bg-indigo-600 py-2 font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+          className="w-full rounded-md bg-brand-600 dark:bg-brand-400 py-2 font-medium text-brand-400 dark:text-brand-600 hover:bg-brand-700 dark:hover:bg-brand-300 disabled:opacity-50"
         >
-          {submitting ? "Creating account…" : "Sign up"}
+          {submitting ? (
+            <Spinner />
+          ) : (
+            "Sign up"
+          )}
         </button>
       </form>
     </AuthCard>

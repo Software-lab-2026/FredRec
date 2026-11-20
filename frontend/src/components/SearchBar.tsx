@@ -22,7 +22,7 @@ export default function SearchBar({
     setQuery(q);
     navigate(` /search?q=${encodeURIComponent(q.trim())}`);
   }
-  function onSubmit(e: Formevent) {
+  function onSubmit(e: FormEvent) {
     e.preventDefault();
     go(query);
   }

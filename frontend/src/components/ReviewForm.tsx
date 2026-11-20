@@ -74,6 +74,7 @@ export default function ReviewForm({
       >
         {status === "saving" ? "Submitting…" : "Submit review"}
       </button>
+      {error && <p className="text-sm text-rose-600 dark:text-rose-400">{error}</p>}
     </form>
   );
 }

@@ -1,4 +1,4 @@
-import type { DomainGraph, NewConcept, NewEdge } from "../types/concepts";
+import type { DomainGraph, NewConcept, NewEdge } from "../types/concepts.ts";
 import { apiFetch } from "./client";
 
 export function getDomainGraph(domainId: string): Promise<DomainGraph> {

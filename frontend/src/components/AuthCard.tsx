@@ -6,6 +6,7 @@ interface Props {
   error: string;
   footer: ReactNode;
   children: ReactNode;
+  split?: boolean;
 }
 
 export default function AuthCard({
@@ -14,11 +15,31 @@ export default function AuthCard({
   error,
   footer,
   children,
+  split = false,
 }: Props) {
-  return (
-    <div className="mx-auto max-w-sm rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+  if (split) {
+    return (
+      <div className="mx-auto mt-8 grid max-w-4xl items-center gap-8 rounded-xl border border-ink-200 dark:border-ink-800 bg-white dark:bg-ink-900 p-8 shadow-sm md:grid-cols-2">
+        <div>
+          <h1 className="text-4xl font-bold">{title}</h1>
+          <p className="mt-3 text-ink-600 dark:text-ink-400">{subtitle}</p>
+        </div>
+        <div>
+          {error && (
+            <p className="mb-4 rounded-md bg-rose-50 dark:bg-rose-950 px-3 py-2 text-sm text-rose-700 dark:text-rose-300">
+              {error}
+            </p>
+          )}
+          {children}
+          <p className="mt-6 text-center text-sm text-ink-600 dark:text-ink-400">{footer}</p>
+        </div>
+      </div>
+    );
+}
+return (
+    <div className="mx-auto max-w-sm rounded-xl border border-ink-200 dark:border-ink-800 bg-white dark:bg-ink-900 p-6 shadow-sm">
       <h1 className="text-xl font-bold">{title}</h1>
-      <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+      <p className="mt-1 text-sm text-ink-600 dark:text-ink-400">
         {subtitle}
       </p>
       {error && (
@@ -27,7 +48,7 @@ export default function AuthCard({
         </p>
       )}
       <div className="mt-6">{children}</div>
-      <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
+      <p className="mt-6 text-center text-sm text-ink-600 dark:text-ink-400">
         {footer}
       </p>
     </div>

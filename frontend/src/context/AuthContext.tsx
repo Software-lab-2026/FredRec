@@ -28,6 +28,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       authApi.logout();
       setUser(null);
     },
+    changePassword: async (currentPassword, newPassword) =>
+      setUser(await authApi.changePassword(currentPassword, newPassword)),
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
