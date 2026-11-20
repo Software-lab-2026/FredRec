@@ -1,0 +1,140 @@
+# Labelled queries for tuning the meaning-based (vector) search thresholds. Used by experiments/calibrate.py.
+# Add a query whenever search gets one wrong, then re-run the calibration and record the result
+# (docs/experiments/README.md).
+#
+# topic_matching: what a search should resolve to when it isn't an exact topic name or alias.
+#   expect: the acceptable topic names (any of them counts as right), or [] if it should match nothing.
+# scraped_items: whether a query has genuinely relevant scraped lectures/courses (NPTEL, MIT OCW, Teach Yourself CS).
+
+topic_matching:
+  # Paraphrases and sub-topics of covered topics
+  - {query: "neural networks", expect: [Deep Learning, Machine Learning]}
+  - {query: "backpropagation", expect: [Deep Learning, Machine Learning]}
+  - {query: "transformers attention", expect: [Deep Learning, Natural Language Processing, Generative AI]}
+  - {query: "large language models", expect: [Generative AI, Natural Language Processing]}
+  - {query: "image classification", expect: [Computer Vision, Deep Learning]}
+  - {query: "q learning", expect: [Reinforcement Learning]}
+  - {query: "pandas dataframes", expect: [Data Analysis, Python]}
+  - {query: "binary search tree", expect: [Trees, Sorting and Searching]}
+  - {query: "shortest path algorithms", expect: [Graphs]}
+  - {query: "hash tables", expect: [Hashing]}
+  - {query: "priority queue", expect: [Heaps, Stacks and Queues]}
+  - {query: "memoization", expect: [Dynamic Programming, Recursion]}
+  - {query: "merge sort", expect: [Sorting and Searching]}
+  - {query: "process scheduling", expect: [Operating Systems]}
+  - {query: "virtual memory paging", expect: [Operating Systems, Computer Organization and Architecture]}
+  - {query: "tcp ip protocol", expect: [Computer Networks]}
+  - {query: "public key encryption", expect: [Cryptography, Network Security]}
+  - {query: "sql joins tutorial", expect: [SQL, Database Management Systems]}
+  - {query: "database normalization", expect: [Database Management Systems, SQL]}
+  - {query: "mongodb", expect: [NoSQL]}
+  - {query: "unit testing", expect: [Software Testing]}
+  - {query: "version control", expect: [Git]}
+  - {query: "react hooks", expect: [Frontend Frameworks]}
+  - {query: "container orchestration", expect: [Kubernetes, Docker]}
+  - {query: "consensus algorithms raft paxos", expect: [Distributed Systems]}
+  - {query: "regular expressions automata", expect: [Theory of Computation]}
+  - {query: "parsing and lexical analysis", expect: [Compiler Design]}
+  - {query: "boolean algebra logic gates", expect: [Digital Logic]}
+  - {query: "np completeness", expect: [Complexity Theory, Theory of Computation]}
+  - {query: "eigenvalues and matrices", expect: [Linear Algebra for CS]}
+  - {query: "bayes theorem", expect: [Probability and Statistics]}
+  - {query: "classes and inheritance", expect: [Object-Oriented Programming]}
+  # Known hard cases (wrong matches seen in testing)
+  - {query: "mixture of experts routing", expect: [Machine Learning, Deep Learning, Generative AI]}
+  - {query: "hyperparameter tuning bayesian", expect: [Machine Learning]}
+  - {query: "how computers talk to each other", expect: [Computer Networks]}
+  - {query: "federated learning privacy", expect: [Machine Learning, Deep Learning]}
+  # Not Computer Science: should match nothing
+  - {query: "sourdough baking", expect: []}
+  - {query: "football scores", expect: []}
+  - {query: "guitar chords", expect: []}
+  - {query: "cooking pasta recipes", expect: []}
+  - {query: "knitting patterns", expect: []}
+  - {query: "stock market tips", expect: []}
+  - {query: "gardening in winter", expect: []}
+  - {query: "renaissance painting", expect: []}
+
+scraped_items:
+  - {query: "bias variance tradeoff", relevant: true}
+  - {query: "dijkstra shortest path", relevant: true}
+  - {query: "hashing", relevant: true}
+  - {query: "tcp congestion control", relevant: true}
+  - {query: "jacobian in neural networks", relevant: true}
+  - {query: "page replacement algorithms", relevant: true}
+  - {query: "convolutional neural networks", relevant: true}
+  - {query: "b+ trees indexing", relevant: true}
+  - {query: "context free grammars", relevant: true}
+  - {query: "public key cryptography rsa", relevant: true}
+  - {query: "sourdough baking", relevant: false}
+  - {query: "football scores", relevant: false}
+  - {query: "guitar chords", relevant: false}
+  - {query: "gardening in winter", relevant: false}
+  - {query: "renaissance painting", relevant: false}
+
+# Held out: written after the topic descriptions (data/topic_descriptions.yaml) were frozen on 2026-11-22, in a
+# learner's words, so they measure whether descriptions generalise rather than whether they echo the dev queries
+# above. Don't tune descriptions against these; add new held-out queries instead if they get stale.
+topic_matching_heldout:
+  - {query: "how does a cpu cache work", expect: [Computer Organization and Architecture]}
+  - {query: "what is a deadlock", expect: [Operating Systems]}
+  - {query: "mutex vs semaphore", expect: [Operating Systems, Systems Programming, Parallel Computing]}
+  - {query: "build a web server in node", expect: [Backend Development, JavaScript]}
+  - {query: "css flexbox layout", expect: [HTML and CSS]}
+  - {query: "vue components tutorial", expect: [Frontend Frameworks]}
+  - {query: "swiftui beginner", expect: [iOS Development]}
+  - {query: "kotlin app for phones", expect: [Android Development]}
+  - {query: "gradient descent explained", expect: [Machine Learning, Deep Learning]}
+  - {query: "random forest classifier", expect: [Machine Learning]}
+  - {query: "convolution layers for images", expect: [Deep Learning, Computer Vision]}
+  - {query: "word2vec embeddings", expect: [Natural Language Processing]}
+  - {query: "object detection yolo", expect: [Computer Vision]}
+  - {query: "markov decision process", expect: [Reinforcement Learning]}
+  - {query: "stable diffusion image generation", expect: [Generative AI]}
+  - {query: "prompt engineering for chatgpt", expect: [Generative AI]}
+  - {query: "numpy arrays and plotting", expect: [Data Analysis, Python]}
+  - {query: "knapsack problem", expect: [Dynamic Programming]}
+  - {query: "minimum spanning tree", expect: [Graphs, Greedy Algorithms]}
+  - {query: "quicksort pivot", expect: [Sorting and Searching]}
+  - {query: "reverse a linked list", expect: [Linked Lists]}
+  - {query: "trie for autocomplete", expect: [Trees]}
+  - {query: "sliding window technique", expect: [Arrays]}
+  - {query: "n queens problem", expect: [Backtracking]}
+  - {query: "pointers and memory in c", expect: [C]}
+  - {query: "python decorators", expect: [Python]}
+  - {query: "lambda calculus and haskell", expect: [Functional Programming]}
+  - {query: "polymorphism example", expect: [Object-Oriented Programming]}
+  - {query: "pumping lemma", expect: [Theory of Computation]}
+  - {query: "p vs np problem", expect: [Complexity Theory]}
+  - {query: "mathematical induction proofs", expect: [Discrete Mathematics]}
+  - {query: "singular value decomposition", expect: [Linear Algebra for CS]}
+  - {query: "flip flops and counters", expect: [Digital Logic]}
+  - {query: "arduino projects", expect: [Embedded Systems]}
+  - {query: "subnet masks ip addressing", expect: [Computer Networks]}
+  - {query: "how https certificates work", expect: [Cryptography, Network Security, Web Security]}
+  - {query: "sql injection attack", expect: [Web Security, Ethical Hacking]}
+  - {query: "penetration testing with kali", expect: [Ethical Hacking]}
+  - {query: "acid transactions", expect: [Database Management Systems]}
+  - {query: "redis key value store", expect: [NoSQL]}
+  - {query: "spark mapreduce", expect: [Big Data]}
+  - {query: "airflow pipelines", expect: [Data Engineering]}
+  - {query: "star schema fact tables", expect: [Data Warehousing]}
+  - {query: "scrum sprints", expect: [Software Development Life Cycle]}
+  - {query: "observer pattern", expect: [Design Patterns]}
+  - {query: "merge conflicts", expect: [Git]}
+  - {query: "load balancer and caching at scale", expect: [System Design]}
+  - {query: "github actions pipeline", expect: [CI/CD]}
+  - {query: "dockerfile basics", expect: [Docker]}
+  - {query: "helm charts", expect: [Kubernetes]}
+  - {query: "bash scripting", expect: [Linux]}
+  - {query: "aws lambda serverless", expect: [Cloud Computing]}
+  - {query: "cuda gpu programming", expect: [Parallel Computing]}
+  - {query: "smart contracts solidity", expect: [Blockchain]}
+  - {query: "ray tracing", expect: [Computer Graphics]}
+  - {query: "usability testing ux", expect: [Human-Computer Interaction]}
+  - {query: "qubits and superposition", expect: [Quantum Computing]}
+  - {query: "leetcode practice for interviews", expect: [Interview Preparation, Competitive Programming]}
+  - {query: "chess opening theory", expect: []}
+  - {query: "learn french fast", expect: []}
+  - {query: "marathon training plan", expect: []}
+  - {query: "photosynthesis biology", expect: []}

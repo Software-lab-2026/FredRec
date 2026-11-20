@@ -11,8 +11,8 @@ def _concept_name(value: str) -> str:
     value = value.strip()
     if not value:
         raise ValueError("Enter a name.")
-    if len(value) > 20:
-        raise ValueError("Names must be at most 20 characters.")
+    if len(value) > 80:
+        raise ValueError("Names must be at most 80 characters.")
     return value
 
 

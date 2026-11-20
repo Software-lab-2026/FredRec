@@ -4,13 +4,13 @@ from email_validator import EmailNotValidError, validate_email
 USERNAME_PATTERN = re.compile(r"[A-Za-z0-9_]{3,20}")
 MIN_PASSWORD_LENGTH = 8
 MAX_PASSWORD_LENGTH = 16
-MAX_NAME_LENGTH = 10
+MAX_NAME_LENGTH = 60
 
 
 def clean_username(username: str) -> str:
     if not USERNAME_PATTERN.fullmatch(username):
         raise ValueError(
-            "Username must be 3–10 characters: letters, numbers or underscores.")
+            "Username must be 3–20 characters: letters, numbers or underscores.")
     return username
 
 

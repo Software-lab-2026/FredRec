@@ -2,7 +2,7 @@ import hashlib
 from urllib.parse import parse_qsl, urlencode, urlsplit
 
 INVALID_URL = "Enter a valid link starting with http:// or https://."
-MAX_URL_LENGTH = 200
+MAX_URL_LENGTH = 2000
 
 
 def normalize_url(raw: str) -> tuple[str, str]:

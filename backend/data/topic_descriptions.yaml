@@ -1,0 +1,98 @@
+# Programming Fundamentals
+Python: Python programming language. Variables, data types, lists, tuples, dictionaries, sets, list comprehensions, functions, modules and packages, file handling, exceptions, classes, iterators and generators, decorators, virtual environments, pip, and the standard library.
+C: C programming language. Data types, operators, control flow, functions, arrays, strings, pointers and pointer arithmetic, structures and unions, dynamic memory allocation with malloc and free, header files, the preprocessor, file input and output, and compiling with gcc.
+C++: C++ programming language. Classes and objects, constructors and destructors, references, operator overloading, templates, the Standard Template Library (vector, map, set), iterators, smart pointers, RAII, move semantics, and modern C++ features.
+Java: Java programming language. Classes, objects, packages, interfaces, exceptions, the Collections framework (ArrayList, HashMap), generics, streams and lambdas, multithreading, the JVM and garbage collection, and building with Maven or Gradle.
+JavaScript: JavaScript programming language for the web and Node.js. Variables, functions and closures, objects and prototypes, arrays, the DOM, events, promises, async and await, the event loop, ES modules, and TypeScript basics.
+Object-Oriented Programming: Object-oriented programming concepts. Classes and objects, encapsulation, inheritance, polymorphism, abstraction, interfaces and abstract classes, method overriding and overloading, composition versus inheritance, and SOLID principles.
+Functional Programming: Functional programming paradigm. Pure functions, immutability, first-class and higher-order functions, map, filter and reduce, closures, currying, recursion, lazy evaluation, algebraic data types, pattern matching, monads, and languages such as Haskell, Lisp, Scheme and OCaml.
+Recursion: Recursion in programming. Base cases and recursive cases, the call stack, recursion trees, tail recursion, mutual recursion, divide and conquer, recurrence relations, and converting recursion to iteration.
+
+# Data Structures & Algorithms
+Data Structures & Algorithms: Data structures and algorithms as a whole. Asymptotic analysis and big-O notation, arrays, linked lists, stacks, queues, trees, heaps, hash tables, graphs, sorting and searching, recursion, dynamic programming, greedy algorithms, and algorithm design techniques.
+Arrays: Arrays and strings. Indexing, dynamic arrays, two-pointer technique, sliding window, prefix sums, subarrays, matrix traversal, rotation, and string manipulation problems.
+Linked Lists: Linked lists. Singly and doubly linked lists, circular lists, insertion and deletion, reversing a list, detecting cycles with fast and slow pointers, merging lists, and sentinel nodes.
+Stacks and Queues: Stacks and queues. Push and pop, LIFO and FIFO, circular queues, deques, monotonic stacks, balanced parentheses, expression evaluation, infix to postfix conversion, and queue implementations with arrays or linked lists.
+Trees: Tree data structures. Binary trees, tree traversals (inorder, preorder, postorder, level order), binary search trees, AVL and red-black trees, B-trees, tries, segment trees, lowest common ancestor, and tree height and diameter.
+Graphs: Graph algorithms. Adjacency lists and matrices, breadth-first and depth-first search, shortest paths (Dijkstra, Bellman-Ford, Floyd-Warshall), minimum spanning trees (Kruskal, Prim), topological sort, strongly connected components, union-find, bipartite graphs, and network flow.
+Hashing: Hashing and hash tables. Hash functions, collisions, chaining and open addressing, linear and quadratic probing, load factor and rehashing, hash maps and hash sets, consistent hashing, and Bloom filters.
+Heaps: Heaps and priority queues. Binary heaps, min-heaps and max-heaps, heapify, insertion and extraction, heap sort, top-k problems, merging sorted lists, and Fibonacci heaps.
+Sorting and Searching: Sorting and searching algorithms. Bubble, insertion and selection sort, merge sort, quicksort, heap sort, counting and radix sort, stability, binary search and its variants, and lower bounds for comparison sorting.
+Dynamic Programming: Dynamic programming. Overlapping subproblems and optimal substructure, memoization and tabulation, knapsack, longest common subsequence, edit distance, coin change, matrix chain multiplication, and DP on trees, grids and bitmasks.
+Greedy Algorithms: Greedy algorithms. The greedy choice property, activity selection, interval scheduling, Huffman coding, fractional knapsack, job sequencing, and proofs of greedy correctness with exchange arguments.
+Backtracking: Backtracking search. Generating permutations, combinations and subsets, the N-Queens problem, Sudoku solving, constraint satisfaction, pruning the search tree, and branch and bound.
+Competitive Programming: Competitive programming and contest problem solving. Codeforces, LeetCode and ICPC style problems, time limits and complexity, fast input and output, common techniques and patterns, number theory, bit manipulation, and practice strategies.
+
+# Math & Theory
+Discrete Mathematics: Discrete mathematics for computer science. Logic and propositional calculus, proofs and mathematical induction, sets, relations and functions, combinatorics and counting, permutations, the pigeonhole principle, graph theory, recurrence relations, and modular arithmetic.
+Probability and Statistics: Probability and statistics. Random variables, probability distributions, conditional probability, Bayes' theorem, expectation and variance, the central limit theorem, hypothesis testing, confidence intervals, regression, and Markov chains.
+Linear Algebra for CS: Linear algebra. Vectors and matrices, matrix multiplication, systems of linear equations, Gaussian elimination, determinants, vector spaces, eigenvalues and eigenvectors, orthogonality, singular value decomposition, and applications in graphics and machine learning.
+Theory of Computation: Theory of computation and automata. Finite automata (DFA and NFA), regular expressions and regular languages, the pumping lemma, context-free grammars and pushdown automata, Turing machines, decidability, and the halting problem.
+Compiler Design: Compiler construction. Lexical analysis and tokens, parsing (LL, LR), syntax trees, semantic analysis and type checking, intermediate representations, code generation, register allocation, optimization, and interpreters.
+Complexity Theory: Computational complexity. Time and space complexity classes, P versus NP, NP-completeness and reductions, NP-hard problems such as SAT and travelling salesman, approximation algorithms, and randomized complexity.
+
+# Systems
+Computer Organization and Architecture: Computer organization and architecture. CPU design, instruction set architectures, assembly language, the datapath and control unit, pipelining and hazards, the memory hierarchy, caches, virtual memory hardware, input and output, and RISC versus CISC.
+Digital Logic: Digital logic design. Number systems and binary arithmetic, Boolean algebra, logic gates, Karnaugh maps, combinational circuits (adders, multiplexers, decoders), sequential circuits, flip-flops, registers and counters, and finite state machines.
+Operating Systems: Operating systems. Processes and threads, CPU scheduling, synchronization with locks and semaphores, deadlocks, memory management, paging and virtual memory, file systems, system calls, the kernel, and input and output devices.
+Systems Programming: Systems programming. System calls, processes with fork and exec, signals, inter-process communication with pipes and shared memory, sockets, file descriptors, POSIX threads, memory allocation, and linking and loading.
+Embedded Systems: Embedded systems. Microcontrollers such as Arduino and ARM, GPIO, interrupts, timers, serial communication (UART, SPI, I2C), real-time operating systems, firmware, sensors and actuators, and low-power design.
+
+# Networks & Security
+Computer Networks: Computer networks. The OSI and TCP/IP models, physical and data link layers, Ethernet, IP addressing and subnetting, routing, TCP and UDP, congestion control, DNS, HTTP, sockets, and wireless networks.
+Network Security: Network security. Firewalls, intrusion detection, VPNs, TLS and SSL, network attacks such as denial of service and man-in-the-middle, secure protocols, authentication, and access control.
+Cryptography: Cryptography. Symmetric encryption (AES), public-key encryption (RSA, elliptic curves), hash functions, digital signatures, key exchange with Diffie-Hellman, message authentication codes, certificates and PKI, and cryptographic protocols.
+Ethical Hacking: Ethical hacking and penetration testing. Reconnaissance, scanning with nmap, vulnerability assessment, exploitation, password cracking, privilege escalation, Metasploit, Kali Linux, capture-the-flag challenges, and responsible disclosure.
+Web Security: Web application security. The OWASP Top 10, SQL injection, cross-site scripting (XSS), cross-site request forgery (CSRF), authentication and session management, CORS, content security policy, and secure coding for web apps.
+
+# Databases & Data
+Database Management Systems: Database management systems. The relational model, entity-relationship diagrams, normalization and normal forms, transactions and ACID, concurrency control, indexing with B-trees, query processing and optimization, and recovery.
+SQL: SQL query language. SELECT queries, filtering with WHERE, joins, GROUP BY and aggregation, subqueries, window functions, views, indexes, constraints, and data definition and manipulation in PostgreSQL and MySQL.
+NoSQL: NoSQL databases. Document stores such as MongoDB, key-value stores such as Redis, wide-column stores such as Cassandra, graph databases such as Neo4j, the CAP theorem, eventual consistency, and data modelling without schemas.
+Data Warehousing: Data warehousing. OLAP versus OLTP, star and snowflake schemas, fact and dimension tables, ETL processes, data marts, and business intelligence reporting.
+Big Data: Big data processing. Hadoop, HDFS, MapReduce, Apache Spark, distributed storage, batch versus stream processing, Kafka, and handling very large datasets across clusters.
+Data Engineering: Data engineering. Data pipelines, ETL and ELT, workflow orchestration with Airflow, data lakes, stream processing, data quality, schemas, and cloud data platforms.
+
+# Software Engineering
+Software Development Life Cycle: Software development life cycle. Requirements, design, implementation, testing, deployment and maintenance, the waterfall model, agile methods, Scrum and Kanban, user stories, estimation, and project management.
+Design Patterns: Software design patterns. Creational patterns (singleton, factory, builder), structural patterns (adapter, decorator, facade), behavioural patterns (observer, strategy, command), the Gang of Four book, and anti-patterns.
+Software Testing: Software testing. Unit testing, integration testing, system and acceptance testing, test-driven development, mocking, test coverage, black-box and white-box testing, regression testing, and testing frameworks.
+Git: Git version control. Commits, branches, merging and rebasing, resolving conflicts, remote repositories, pull requests, GitHub, and branching workflows.
+System Design: System design for large-scale applications. Scalability, load balancing, caching, database sharding and replication, message queues, rate limiting, consistency trade-offs, and designing services like URL shorteners or chat apps.
+Microservices: Microservices architecture. Service decomposition, APIs between services, service discovery, API gateways, inter-service communication, distributed tracing, resilience patterns such as circuit breakers, and monolith versus microservices.
+
+# Web & Mobile
+HTML and CSS: HTML and CSS for web pages. HTML elements and semantic markup, forms, accessibility, CSS selectors, the box model, flexbox, CSS grid, responsive design, and media queries.
+Frontend Frameworks: Frontend web frameworks. React components, props, state and hooks, Vue, Angular, Svelte, single-page applications, client-side routing, state management, and build tools.
+Backend Development: Backend web development. Web servers, request handling and routing, Node.js and Express, Django, Flask, Spring Boot, authentication, databases and ORMs, and server-side rendering.
+REST and GraphQL APIs: Web APIs. REST principles, HTTP methods and status codes, resource design, JSON, API versioning, authentication with tokens, OpenAPI documentation, GraphQL schemas, queries and mutations.
+Android Development: Android app development. Kotlin and Java for Android, activities and fragments, Jetpack Compose, layouts, the app lifecycle, Android Studio, and publishing to Google Play.
+iOS Development: iOS app development. Swift, SwiftUI and UIKit, Xcode, view controllers, the app lifecycle, Core Data, and publishing to the App Store.
+Flutter: Flutter cross-platform app development. The Dart language, widgets, state management, layouts, navigation, and building apps for Android and iOS from one codebase.
+
+# AI / ML / Data Science
+Machine Learning: Machine learning. Supervised and unsupervised learning, linear and logistic regression, decision trees, random forests, support vector machines, k-nearest neighbours, clustering, the bias-variance trade-off, overfitting and regularization, cross-validation, gradient descent, and model evaluation.
+Deep Learning: Deep learning with neural networks. Perceptrons, multilayer networks, activation functions, backpropagation, gradient-based optimization, convolutional neural networks, recurrent networks and LSTMs, transformers and attention, dropout, batch normalization, and frameworks such as PyTorch and TensorFlow.
+Natural Language Processing: Natural language processing. Text preprocessing and tokenization, word embeddings, language models, sequence models, transformers, BERT and GPT, sentiment analysis, machine translation, named entity recognition, and question answering.
+Computer Vision: Computer vision. Image processing, filters and edge detection, feature extraction, image classification, object detection, image segmentation, convolutional neural networks for images, face recognition, and video analysis.
+Reinforcement Learning: Reinforcement learning. Agents, environments and rewards, Markov decision processes, value functions, the Bellman equation, Q-learning, policy gradients, exploration versus exploitation, multi-armed bandits, and deep reinforcement learning.
+Data Analysis: Data analysis and data science. Exploring and cleaning data, pandas and NumPy, data visualization with Matplotlib, descriptive statistics, Jupyter notebooks, feature engineering, and communicating findings.
+Generative AI: Generative artificial intelligence. Large language models, prompt engineering, retrieval-augmented generation, fine-tuning, diffusion models for images, generative adversarial networks, variational autoencoders, and AI agents.
+
+# Cloud & DevOps
+Cloud Computing: Cloud computing. IaaS, PaaS and SaaS, virtual machines, AWS, Azure and Google Cloud, storage services, serverless functions, auto-scaling, cloud networking, and cost management.
+Docker: Docker containers. Images and containers, Dockerfiles, layers, volumes, container networking, Docker Compose, registries, and containerizing applications.
+Kubernetes: Kubernetes container orchestration. Pods, deployments, services, ingress, ConfigMaps and secrets, scaling, rolling updates, Helm charts, and managing clusters.
+CI/CD: Continuous integration and continuous delivery. Build pipelines, automated tests, GitHub Actions, Jenkins, deployment strategies such as blue-green and canary releases, artifacts, and infrastructure as code.
+Linux: Linux operating system and the command line. Shell commands, bash scripting, file permissions, processes, package management, users and groups, text processing with grep, sed and awk, and system administration.
+
+# Distributed & Parallel
+Distributed Systems: Distributed systems. Replication, consistency models, consensus algorithms such as Paxos and Raft, fault tolerance, distributed transactions, clocks and ordering, partitioning, and the CAP theorem.
+Parallel Computing: Parallel computing. Multithreading, shared memory and message passing, OpenMP, MPI, GPU programming with CUDA, parallel algorithms, speedup and Amdahl's law, and synchronization.
+Blockchain: Blockchain technology. Distributed ledgers, cryptographic hashing, proof of work and proof of stake, Bitcoin, Ethereum, smart contracts, Solidity, decentralized applications, and consensus.
+
+# Other
+Computer Graphics: Computer graphics. Rasterization, 2D and 3D transformations, projection, the rendering pipeline, shading and lighting, texture mapping, ray tracing, OpenGL and shaders.
+Human-Computer Interaction: Human-computer interaction. User-centred design, usability, user research, prototyping, interface design principles, accessibility, user experience (UX), and usability evaluation.
+Quantum Computing: Quantum computing. Qubits, superposition and entanglement, quantum gates and circuits, quantum algorithms such as Shor's and Grover's, quantum error correction, and Qiskit.
+Interview Preparation: Technical interview preparation for software jobs. Coding interview problems, data structure and algorithm practice, system design interviews, behavioural questions, resumes, and mock interviews.

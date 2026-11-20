@@ -11,10 +11,11 @@ from app.core.config import BACKEND_DIR, MissingDatabaseUrl
 from app.core.db import get_sync_engine
 from app.core.security import hash_password
 from app.core.validation import clean_email, clean_password, clean_username
-from app.models import Concept, Resource, SearchEvent, Domain, Topic, User, SearchCache
+from app.models import Concept, Domain, Resource, SearchCache, SearchEvent, Topic, User
 from app.models.base import Role
 
 SEED_FILE = BACKEND_DIR / "data" / "topics.yaml"
+DESCRIPTIONS_FILE = BACKEND_DIR / "data" / "topic_descriptions.yaml"
 
 
 def create_admin(engine: Engine, username: str, email: str, password: str) -> None:
@@ -34,11 +35,19 @@ def create_admin(engine: Engine, username: str, email: str, password: str) -> No
         session.commit()
 
 
-def seed_domains(engine: Engine, seed_file: Path = SEED_FILE) -> tuple[int, int]:
+def seed_domains(
+    engine: Engine, seed_file: Path = SEED_FILE, descriptions_file: Path = DESCRIPTIONS_FILE
+) -> tuple[int, int, int]:
     seed = yaml.safe_load(seed_file.read_text())
-    new_domains = new_topics = 0
+    descriptions = {k.lower(): v for k, v in (
+        yaml.safe_load(descriptions_file.read_text()) or {}).items()}
+    new_domains = new_topics = described = 0
     with Session(engine) as session:
         domains = {d.name.lower(): d for d in session.scalars(select(Domain))}
+        for topic in session.scalars(select(Topic).where(Topic.description == "")):
+            if text := descriptions.get(topic.name.lower()):
+                topic.description, topic.embedding = text, None  # None: embed-all recomputes it
+                described += 1
         topics = {t.name.lower() for t in session.scalars(select(Topic))}
         for entry in seed:
             domain = domains.get(entry["name"].lower())
@@ -50,11 +59,18 @@ def seed_domains(engine: Engine, seed_file: Path = SEED_FILE) -> tuple[int, int]
             for topic in entry["topics"]:
                 if topic["name"].lower() not in topics:
                     session.add(
-                        Topic(domain_id=domain.id, name=topic["name"], aliases=topic.get("aliases", [])))
+                        Topic(
+                            domain_id=domain.id,
+                            name=topic["name"],
+                            aliases=topic.get("aliases", []),
+                            description=descriptions.get(
+                                topic["name"].lower(), ""),
+                        )
+                    )
                     topics.add(topic["name"].lower())
                     new_topics += 1
         session.commit()
-    return new_domains, new_topics
+    return new_domains, new_topics, described
 
 
 def prune_cache(engine: Engine) -> int:
@@ -106,9 +122,23 @@ async def embed_all(refresh: bool = False) -> dict[str, int]:
     return counts
 
 
+async def scrape(names: list[str], limit: int | None = None) -> list:
+    from sqlalchemy.ext.asyncio import async_sessionmaker
+
+    from app.core.db import get_async_engine
+    from app.scrapers import SCRAPERS
+    from app.services.scraping import run_scraper
+
+    runs = []
+    async with async_sessionmaker(get_async_engine(), expire_on_commit=False)() as session:
+        for name in names:
+            runs.append(await run_scraper(session, SCRAPERS[name](limit=limit)))
+    return runs
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
-        prog="python -m app.cli", description="FredRec Tools")
+        prog="python -m app.cli", description="FredRec admin tools")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser(
         "seed-domains", help="add the starting domains and topics")
@@ -120,6 +150,14 @@ def main() -> int:
         "embed-all", help="compute missing embeddings for meaning-based search")
     embed.add_argument("--refresh", action="store_true",
                        help="recompute every embedding, not just missing ones")
+    from app.scrapers import SCRAPERS
+
+    scraper = commands.add_parser(
+        "scrape", help="crawl NPTEL, MIT OpenCourseWare and/or Teach Yourself CS into the search index"
+    )
+    scraper.add_argument("sites", nargs="+", choices=[*SCRAPERS, "all"])
+    scraper.add_argument(
+        "--limit", type=int, help="only the first N courses or sections (a quick trial run)")
     admin = commands.add_parser(
         "create-admin", help="create an admin account (asks for the password)")
     admin.add_argument("--username", required=True)
@@ -135,6 +173,21 @@ def main() -> int:
         print(f"Deleted {prune_search_log(
             engine)} search-log entries older than {SEARCH_LOG_DAYS} days.")
         return 0
+    if args.command == "scrape":
+        names = list(SCRAPERS) if "all" in args.sites else list(
+            dict.fromkeys(args.sites))
+        failed = False
+        for run in asyncio.run(scrape(names, args.limit)):
+            print(
+                f"{run.scraper}: {run.status.value} — {
+                    run.items_seen} items ({run.items_added} new, "
+                f"{run.items_updated} changed, {run.items_removed} removed), {
+                    run.pages_fetched} pages fetched"
+            )
+            if run.message:
+                print("  " + run.message.replace("\n", "\n  "))
+            failed = failed or run.status.value == "failed"
+        return 1 if failed else 0
     if args.command == "embed-all":
         counts = asyncio.run(embed_all(args.refresh))
         print("Embedded " +
@@ -144,8 +197,11 @@ def main() -> int:
         print(f"Deleted {prune_cache(engine)} expired cache entries.")
         return 0
     if args.command == "seed-domains":
-        new_domains, new_topics = seed_domains(engine)
-        print(f"Added {new_domains} domains and {new_topics} topics.")
+        new_domains, new_topics, described = seed_domains(engine)
+        print(f"Added {new_domains} domains and {
+              new_topics} topics; filled {described} topic descriptions.")
+        if new_topics or described:
+            print("Now run: python -m app.cli embed-all")
         return 0
 
     password = getpass.getpass("Password: ")
