@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { suggestTopics } from "../data/topics";
+import { useDomains } from "../hooks/useDomains";
 
 export default function SearchBar({
   initialQuery = "",
@@ -12,7 +13,8 @@ export default function SearchBar({
   const [query, setQuery] = useState(initialQuery);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const suggestions = suggestTopics(query);
+  const { allTopics } = useDomains();
+  const suggestions = suggestTopics(allTopics,query);
 
   function go(q: string) {
     if (!q.trim()) return;
@@ -20,7 +22,7 @@ export default function SearchBar({
     setQuery(q);
     navigate(` /search?q=${encodeURIComponent(q.trim())}`);
   }
-  function onSubmit(e: Formevent) {
+  function onSubmit(e: FormEvent) {
     e.preventDefault();
     go(query);
   }

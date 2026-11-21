@@ -2,6 +2,8 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import AuthCard, { Field } from "../components/AuthCard";
 import { useAuth } from "../context/useAuth";
+import { Spinner } from "../components/Loader";
+
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -29,6 +31,7 @@ export default function LoginPage() {
 
   return (
     <AuthCard
+      split
       title="Log in"
       subtitle="Log in to save resources and track your progress."
       error={error}
@@ -37,7 +40,7 @@ export default function LoginPage() {
           New here?{" "}
           <Link
             to={`/signup?next=${encodeURIComponent(next)}`}
-            className="font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+            className="font-medium text-brand-600 dark:text-brand-400 hover:underline"
           >
             Create an account
           </Link>
@@ -61,9 +64,13 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-md bg-indigo-600 py-2 font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+          className="w-full rounded-md bg-brand-600 dark:bg-brand-400 py-2 font-medium text-brand-400 dark:text-brand-600 hover:bg-brand-700 dark:hover:bg-brand-300 disabled:opacity-50"
         >
-          {submitting ? "Logging in…" : "Log in"}
+          {submitting ? (
+            <Spinner />
+          ) : (
+            "Log in"
+          )}
         </button>
       </form>
     </AuthCard>

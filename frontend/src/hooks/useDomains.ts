@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { listDomains } from "../api/domains";
 import { domainKeys } from "./curationKeys";
 
+// All domains & topics 
 export function useDomains() {
   const query = useQuery({ queryKey: domainKeys.all, queryFn: listDomains });
   const domains = query.data ?? [];
@@ -12,4 +13,3 @@ export function useDomains() {
     domainName: (id: string) => domains.find((d) => d.id === id)?.name ?? id,
   };
 }
-

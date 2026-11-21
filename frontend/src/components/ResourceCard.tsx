@@ -5,10 +5,10 @@ import ReviewForm from "./ReviewForm";
 function formatDuration(minutes: number) {
   if (minutes < 60) return `${minutes} min`;
   const hours = Math.round(minutes / 60);
-  return `${hours} hrs`;
+  return `${hours} hr${hours > 1 ? "s" : ""}`;
 }
 
-const difficulty_style = {
+const DIFFICULTY_STYLES = {
   beginner:
     "bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300",
   intermediate:
@@ -41,8 +41,16 @@ export default function ResourceCard({
   ].filter(Boolean);
 
   return (
-    <article className="flex flex-col rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+    <article className="flex flex-col rounded-xl border border-ink-200 dark:border-ink-800 bg-white dark:bg-ink-900 p-4 shadow-sm">
       <div className="mb-2 flex flex-wrap items-center gap-2 text-xs">
+        {resource.origin === "curated" && (
+          <span
+            title="Suggested by a learner, reviewed by a domain expert and approved by the admin"
+            className="rounded-full bg-brand-600 dark:bg-brand-400 px-2 py-0.5 font-medium text-brand-400 dark:text-brand-600"
+          >
+             Expert reviewed
+          </span>
+        )}
         {resource.difficulty && (
           <span
             className={`rounded-full px-2 py-0.5 font-medium capitalize ${DIFFICULTY_STYLES[resource.difficulty]}`}
@@ -50,10 +58,10 @@ export default function ResourceCard({
             {resource.difficulty}
           </span>
         )}
-        {resource.avgRating !== undefined && (
+        {resource.avgRating != null && (
           <span className="text-amber-600 dark:text-amber-400">
             ★ {resource.avgRating.toFixed(1)}{" "}
-            <span className="text-slate-500">({resource.reviewCount})</span>
+            <span className="text-ink-500">({resource.reviewCount})</span>
           </span>
         )}
       </div>
@@ -61,12 +69,12 @@ export default function ResourceCard({
         href={resource.url}
         target="_blank"
         rel="noreferrer"
-        className="font-semibold text-slate-900 dark:text-slate-100 hover:text-indigo-600 dark:hover:text-indigo-400"
+        className="font-semibold text-ink-900 dark:text-ink-100 hover:text-brand-600 dark:hover:text-brand-400"
       >
         {resource.title}
       </a>
-      <p className="mt-1 text-xs text-slate-500">{meta.join(" · ")}</p>
-      <p className="mt-2 flex-1 text-sm text-slate-600 dark:text-slate-400">
+      <p className="mt-1 text-xs text-ink-500">{meta.join(" · ")}</p>
+      <p className="mt-2 flex-1 text-sm text-ink-600 dark:text-ink-400">
         {resource.description}
       </p>
       <div className="mt-4 flex gap-2">
@@ -74,8 +82,8 @@ export default function ResourceCard({
           onClick={() => onSave(resource)}
           className={`rounded-md px-3 py-1.5 text-sm font-medium ${
             savedCount > 0
-              ? "bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200 hover:bg-indigo-100 dark:bg-indigo-950 dark:text-indigo-300 dark:ring-indigo-900 dark:hover:bg-indigo-900"
-              : "bg-indigo-600 text-white hover:bg-indigo-700"
+              ? "bg-brand-50 text-brand-700 ring-1 ring-brand-200 hover:bg-brand-100 dark:bg-brand-950 dark:text-brand-300 dark:ring-brand-900 dark:hover:bg-brand-900"
+              : "bg-brand-600 dark:bg-brand-400 text-brand-400 dark:text-brand-600 hover:bg-brand-700 dark:hover:bg-brand-300"
           }`}
         >
           {savedCount > 0
@@ -86,7 +94,7 @@ export default function ResourceCard({
           onClick={() =>
             loggedIn ? setReviewing((r) => !r) : onRequireLogin()
           }
-          className="rounded-md border border-slate-300 dark:border-slate-700 px-3 py-1.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+          className="rounded-md border border-ink-300 dark:border-ink-700 px-3 py-1.5 text-sm text-ink-700 dark:text-ink-300 hover:bg-ink-50 dark:hover:bg-ink-800"
         >
           Rate
         </button>

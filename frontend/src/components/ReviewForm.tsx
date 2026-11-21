@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 import { submitReview } from "../api/workspace";
 import type { Resource } from "../types/resource";
@@ -12,13 +13,23 @@ export default function ReviewForm({
   const [rating, setRating] = useState(0);
   const [text, setText] = useState("");
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
+  const [error, setError] = useState("");
+  const queryClient = useQueryClient();
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!rating) return;
     setStatus("saving");
-    await submitReview(resource, rating, text);
+    setError("");
+    try {
+      await submitReview(resource, rating, text);
+    } catch (err) {
+      setError((err as Error).message);
+      setStatus("idle");
+      return;
+    }
     setStatus("done");
+    queryClient.invalidateQueries({ queryKey: ["search"] });
     setTimeout(onDone, 1000);
   }
 
@@ -63,6 +74,7 @@ export default function ReviewForm({
       >
         {status === "saving" ? "Submitting…" : "Submit review"}
       </button>
+      {error && <p className="text-sm text-rose-600 dark:text-rose-400">{error}</p>}
     </form>
   );
 }

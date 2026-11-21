@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { createWorkspace, listWorkspaces } from "../api/workspace";
 import { useAuth } from "../context/useAuth";
 import { workspaceKeys } from "../hooks/workspaceKeys";
+import Loader from "../components/Loader";
+
 
 export default function WorkspacesPage() {
   const { user } = useAuth();
@@ -11,12 +13,12 @@ export default function WorkspacesPage() {
   const queryClient = useQueryClient();
   const workspaces = useQuery({
     queryKey: workspaceKeys.list(userId),
-    queryFn: () => listWorkspaces(userId),
+    queryFn: listWorkspaces,
   });
   const [name, setName] = useState("");
 
   const create = useMutation({
-    mutationFn: (n: string) => createWorkspace(userId, n),
+    mutationFn: (n: string) => createWorkspace(n),
     onSuccess: () => {
       setName("");
       return queryClient.invalidateQueries({
@@ -63,7 +65,7 @@ export default function WorkspacesPage() {
         </p>
       )}
 
-      {workspaces.isPending && <p className="mt-8 text-slate-500">Loading…</p>}
+      {workspaces.isPending && <Loader className="mt-8" />}
 
       {workspaces.isSuccess && workspaces.data.length === 0 && (
         <div className="mt-8 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 text-center">

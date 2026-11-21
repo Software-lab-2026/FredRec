@@ -1,25 +1,30 @@
 import { Link } from "react-router-dom";
-import { TOPIC_DOMAINS } from "../data/topics";
+import { useDomains } from "../hooks/useDomains";
+import Loader from "../components/Loader";
 
 export default function TopicsPage() {
+  const { domains, error, isPending } = useDomains();
+
   return (
     <div>
       <h1 className="text-2xl font-bold">Browse Computer Science topics</h1>
+      {isPending && <Loader className="mt-6" />}
+      {error && <p className="mt-4 text-rose-600 dark:text-rose-400">{error.message}</p>}
       <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {TOPIC_DOMAINS.map((d) => (
+        {domains.map((d) => (
           <section
-            key={d.domain}
-            className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4"
+            key={d.id}
+            className="rounded-xl border border-ink-200 dark:border-ink-800 bg-white dark:bg-ink-900 p-4"
           >
-            <h2 className="font-semibold text-slate-800 dark:text-slate-200">
-              {d.domain}
+            <h2 className="font-semibold text-ink-800 dark:text-ink-200">
+              {d.name}
             </h2>
             <ul className="mt-2 flex flex-wrap gap-2">
               {d.topics.map((t) => (
                 <li key={t}>
                   <Link
                     to={`/search?q=${encodeURIComponent(t)}`}
-                    className="inline-block rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-xs text-slate-700 dark:text-slate-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 hover:text-indigo-700 dark:hover:text-indigo-300"
+                    className="inline-block rounded-full bg-ink-100 dark:bg-ink-800 px-2.5 py-1 text-xs text-ink-700 dark:text-ink-300 hover:bg-brand-100 dark:hover:bg-brand-900 hover:text-brand-700 dark:hover:text-brand-300"
                   >
                     {t}
                   </Link>

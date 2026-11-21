@@ -12,3 +12,11 @@ export const curationKeys = {
   experts: ["curation", "experts"] as const,
 };
 
+export const graphKeys = {
+  domain: (domainId: string) => ["graph", domainId] as const,
+};
+
+export const statsKeys = {
+  admin: (days: number) => ["stats", "admin", days] as const,
+  expert: (userId: string, days: number) => ["stats", "expert", userId, days] as const,
+};

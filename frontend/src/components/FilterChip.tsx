@@ -14,8 +14,8 @@ export default function FilterChip({
       onClick={onClick}
       className={`rounded-full px-3 py-1 text-sm ${
         active
-          ? "bg-indigo-600 text-white"
-          : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-700 dark:hover:bg-slate-800"
+          ? "bg-brand-600 dark:bg-brand-400 text-brand-400 dark:text-brand-600"
+          : "bg-white text-ink-700 ring-1 ring-ink-200 hover:bg-ink-50 dark:bg-ink-900 dark:text-ink-300 dark:ring-ink-700 dark:hover:bg-ink-800"
       }`}
     >
       {children}
