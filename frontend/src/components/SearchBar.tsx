@@ -14,13 +14,13 @@ export default function SearchBar({
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { allTopics } = useDomains();
-  const suggestions = suggestTopics(allTopics,query);
+  const suggestions = suggestTopics(allTopics, query);
 
   function go(q: string) {
     if (!q.trim()) return;
     setOpen(false);
     setQuery(q);
-    navigate(` /search?q=${encodeURIComponent(q.trim())}`);
+    navigate(`/search?q=${encodeURIComponent(q.trim())}`);
   }
   function onSubmit(e: FormEvent) {
     e.preventDefault();
